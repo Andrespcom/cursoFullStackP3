@@ -1,11 +1,18 @@
 const express = require('express');
 const morgan = require('morgan');
 
+morgan.token('body', (req) => {
+  return req.method === 'POST' ? JSON.stringify(req.body) : '';
+});
+
 const app = express();
 const PORT = 3001;
 
 app.use(express.json());
-app.use(morgan('tiny'));
+
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms :body')
+);
 
 const persons = [
   { id: 1, name: 'Arto Hellas', number: '040-123456' },
